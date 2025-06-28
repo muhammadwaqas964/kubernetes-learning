@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: volume-demo
+spec:
+  containers:
+    - name: app-container
+      image: busybox
+      command: ["sh", "-c", "echo Hello from volume > /data/hello.txt && sleep 3600"]
+      volumeMounts:
+        - mountPath: "/data"
+          name: storage
+  volumes:
+    - name: storage
+      persistentVolumeClaim:
+        claimName: local-pvc
