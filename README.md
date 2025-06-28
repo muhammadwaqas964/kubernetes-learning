@@ -6,28 +6,33 @@ Welcome to my hands-on Kubernetes learning repo. This covers container orchestra
 
 ## 📚 Table of Contents
 
-| Day | Topics Covered | Folder |
-|-----|----------------|--------|
-| 1   | [Intro to Kubernetes & Containers](./Day1/day1-notes.md) | Day1 |
-| 2   | [Installing Kubernetes Setup on Fedora + containerd + Minikube](./Day2/day2-setup.md) | Day2 |
-| 3   | [Pods, YAML, Logs, Describe, and Inspection](./Day3/day3-pods.md) | Day3 |
-| 4   | [Deployments, ReplicaSets, Rolling Updates & Rollbacks](./Day4/day4-deployments.md) | Day4 |
+| Day | Topics Covered                                                   | Folder |
+| --- | ---------------------------------------------------------------- | ------ |
+| 1   | Intro to Kubernetes & Containers                                 | Day1   |
+| 2   | Installing Kubernetes Setup on Fedora + containerd + Minikube    | Day2   |
+| 3   | Pods, YAML, Logs, Describe, and Inspection                       | Day3   |
+| 4   | Deployments, ReplicaSets, Rolling Updates & Rollbacks            | Day4   |
+| 5   | Kubernetes Services (ClusterIP, NodePort) + Exposing Deployments | Day5   |
+| 6   | ConfigMaps & Secrets (Inject configs + secure secrets)           | Day6   |
+| 7   | Volumes, PersistentVolume (PV) & PersistentVolumeClaim (PVC)     | Day7   |
+| 8   | Namespaces & Resource Limits (Isolation + CPU/Memory quotas)     | Day8   |
 
 ---
 
 ## 📷 Screenshots
 
-Screenshots for each day are stored in the [`Images/`](./Images/) folder and are embedded inside the relevant markdown files.
+Screenshots for each day are stored in the `Images/` folder and are embedded inside the relevant markdown files.
 
 ---
 
 ## 🛠 Prerequisites
 
-- OS: Fedora 40
-- Container Runtime: containerd
-- Tools Installed:
-  - `kubectl`
-  - `minikube`
+* **OS:** Fedora 40
+* **Container Runtime:** containerd
+* **Tools Installed:**
+
+  * `kubectl`
+  * `minikube`
 
 ---
 
@@ -35,17 +40,23 @@ Screenshots for each day are stored in the [`Images/`](./Images/) folder and are
 
 Clone this repo, apply the YAML files using `kubectl`, and follow along the notes to practice Kubernetes step-by-step on your local cluster.
 
+```bash
+git clone https://github.com/your-username/kubernetes-learning.git
+cd kubernetes-learning
+kubectl apply -f Day3/nginx-pod.yaml  # Example for Day 3
+```
+
 ---
 
 ## 📅 Coming Next
 
-- Day 5: Kubernetes Services & Networking
-- Day 6: Volumes & ConfigMaps
-- Day 7+: Ingress, RBAC, Helm, Monitoring, CI/CD with ArgoCD
+* Day 9: Helm (Package Manager for Kubernetes)
+* Day 10: RBAC (Access Control)
+* Day 11: Ingress Controllers & Routing
+* Day 12: CI/CD with ArgoCD & GitOps
 
 ---
 
 ## 📜 License
 
 MIT License — feel free to fork and build on top of this.
-
