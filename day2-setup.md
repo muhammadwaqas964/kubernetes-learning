@@ -102,15 +102,3 @@ minikube version
 minikube version: v1.36.0
 commit: f8f52f5de11fc6ad8244afac475e1d0f96841df1-dirty
 
-Kubernetes cluster info
-
-kubectl get nodes
-
-NAME                         STATUS   ROLES           AGE   VERSION
-argo-cluster-control-plane   Ready    control-plane   28d   v1.33.1
-
-kubectl cluster-info
-
-Kubernetes control plane is running at https://127.0.0.1:45245
-CoreDNS is running at https://127.0.0.1:45245/api/v1/namespaces/kube-system/services/kube-dns:dns/proxy
-
