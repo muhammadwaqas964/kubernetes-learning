@@ -1,0 +1,8 @@
+# Kubernetes & Helm
+*.lock
+.helm/
+.kube/
+
+# OS-specific
+.DS_Store
+Thumbs.db
