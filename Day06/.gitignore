@@ -1,4 +1,0 @@
-# Ignore secrets and sensitive files
-secret.env
-*.env
-

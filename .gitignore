@@ -6,3 +6,7 @@
 # OS-specific
 .DS_Store
 Thumbs.db
+
+# Ignore secrets and sensitive files
+secret.env
+*.env
