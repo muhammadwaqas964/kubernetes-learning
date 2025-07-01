@@ -24,7 +24,7 @@ jobs:
 
     - name: Build & Push Docker Image
       run: |
-        docker build -t ${{ secrets.DOCKER_USERNAME }}/flask-k8s-app:latest ./app
+        docker build -t ${{ secrets.DOCKER_USERNAME }}/flask-k8s-app:latest ./Day13/app
         docker push ${{ secrets.DOCKER_USERNAME }}/flask-k8s-app:latest
 
     - name: Setup kubectl
