@@ -31,6 +31,5 @@ jobs:
       uses: azure/setup-kubectl@v3
 
     - name: Deploy to Kubernetes
-      run: |
-        kubectl apply -f Day13/k8s/deployment.yaml
-        kubectl apply -f Day13/k8s/service.yaml
+      run: echo "Skipping deployment because runner is not connected to local cluster"
+
