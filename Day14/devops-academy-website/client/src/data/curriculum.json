@@ -1,0 +1,131 @@
+{
+  "learningPaths": [
+    {
+      "id": 1,
+      "name": "Beginner",
+      "description": "Introduction to DevOps and Cloud Computing fundamentals",
+      "level": "beginner",
+      "icon": "fas fa-graduation-cap",
+      "color": "primary",
+      "order": 1,
+      "topics": [
+        {
+          "id": 1,
+          "title": "DevOps Fundamentals",
+          "slug": "devops-fundamentals",
+          "description": "Understanding the core principles and culture of DevOps",
+          "icon": "fas fa-infinity",
+          "level": "beginner",
+          "readTime": 30,
+          "learnerCount": 5420,
+          "order": 1,
+          "objectives": [
+            "Understand DevOps principles and culture",
+            "Learn about CI/CD fundamentals", 
+            "Recognize the benefits of DevOps practices",
+            "Identify key tools and technologies"
+          ],
+          "tags": ["devops", "fundamentals", "culture", "principles"],
+          "prerequisites": []
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "name": "Intermediate", 
+      "description": "Hands-on DevOps practices and cloud implementation",
+      "level": "intermediate",
+      "icon": "fas fa-cogs",
+      "color": "amber",
+      "order": 2,
+      "topics": [
+        {
+          "id": 2,
+          "title": "Infrastructure as Code (IaC)",
+          "slug": "infrastructure-as-code",
+          "description": "Learn to manage infrastructure through code with Terraform, CloudFormation, and best practices",
+          "icon": "fas fa-server",
+          "level": "intermediate",
+          "readTime": 45,
+          "learnerCount": 2847,
+          "order": 1,
+          "objectives": [
+            "Understand Infrastructure as Code principles and benefits",
+            "Master Terraform syntax and resource management",
+            "Implement state management and remote backends", 
+            "Apply IaC best practices in real-world scenarios"
+          ],
+          "tags": ["iac", "terraform", "aws", "infrastructure", "automation"],
+          "prerequisites": ["devops-fundamentals"]
+        },
+        {
+          "id": 3,
+          "title": "Containerization with Docker",
+          "slug": "containerization-docker",
+          "description": "Master container technology, Docker fundamentals, and container orchestration",
+          "icon": "fab fa-docker",
+          "level": "intermediate", 
+          "readTime": 40,
+          "learnerCount": 3156,
+          "order": 2,
+          "objectives": [
+            "Understand containerization concepts and benefits",
+            "Master Docker commands and Dockerfile creation",
+            "Implement Docker Compose for multi-container applications",
+            "Apply container security and optimization best practices"
+          ],
+          "tags": ["docker", "containers", "containerization", "devops"],
+          "prerequisites": ["devops-fundamentals"]
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "name": "Advanced",
+      "description": "Complex architectures and enterprise-level practices", 
+      "level": "advanced",
+      "icon": "fas fa-rocket",
+      "color": "gray",
+      "order": 3,
+      "topics": []
+    }
+  ],
+  "tools": [
+    {
+      "name": "Kubernetes",
+      "category": "orchestration",
+      "icon": "fas fa-dharmachakra",
+      "description": "Container orchestration platform"
+    },
+    {
+      "name": "Terraform", 
+      "category": "iac",
+      "icon": "fas fa-layer-group",
+      "description": "Infrastructure as Code tool"
+    },
+    {
+      "name": "Jenkins",
+      "category": "cicd", 
+      "icon": "fas fa-hammer",
+      "description": "Automation server for CI/CD"
+    },
+    {
+      "name": "AWS",
+      "category": "cloud",
+      "icon": "fab fa-aws", 
+      "description": "Amazon Web Services cloud platform"
+    },
+    {
+      "name": "Azure",
+      "category": "cloud",
+      "icon": "fab fa-microsoft",
+      "description": "Microsoft Azure cloud platform"
+    },
+    {
+      "name": "GCP",
+      "category": "cloud",
+      "icon": "fab fa-google",
+      "description": "Google Cloud Platform"
+    }
+  ]
+}

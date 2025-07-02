@@ -14,7 +14,7 @@ Welcome to **Day 13** of the Kubernetes learning journey! Today we built a **com
 * Write a Dockerfile to containerize the app
 * Create Kubernetes deployment and service YAML files
 * Set up GitHub Actions for CI/CD
-* Automate build + push + deploy on `git push`
+* Automate build + push on `git push`
 
 ---
 
@@ -45,8 +45,6 @@ At the **repo root** (outside Day13):
 
 ### 1. ✅ Create the Flask App
 
-\`\`
-
 ```python
 from flask import Flask
 app = Flask(__name__)
@@ -59,13 +57,13 @@ if __name__ == '__main__':
     app.run(host='0.0.0.0', port=80)
 ```
 
-\`\`
+`requirements.txt`:
 
 ```
 flask
 ```
 
-\`\`
+`Dockerfile`:
 
 ```Dockerfile
 FROM python:3.9-slim
@@ -89,7 +87,7 @@ Visit: [http://localhost:8080](http://localhost:8080)
 
 ### 2. 📦 Kubernetes YAML Files
 
-\`\`
+`deployment.yaml`:
 
 ```yaml
 apiVersion: apps/v1
@@ -115,7 +113,7 @@ spec:
         - containerPort: 80
 ```
 
-\`\`
+`service.yaml`:
 
 ```yaml
 apiVersion: v1
@@ -155,7 +153,9 @@ Go to **GitHub repo → Settings → Secrets and variables → Actions → New r
 
 ### 4. ⚙️ GitHub Actions Workflow
 
-\`\` (this MUST be at repo root)
+> 📝 Since we're using **Minikube (local cluster)**, GitHub cannot deploy using `kubectl`. So we only build & push the image in CI. If you use a **remote cluster**, see instructions below.
+
+`.github/workflows/deploy.yml`:
 
 ```yaml
 name: CI/CD to Kubernetes
@@ -187,22 +187,29 @@ jobs:
         docker build -t ${{ secrets.DOCKER_USERNAME }}/flask-k8s-app:latest ./Day13/app
         docker push ${{ secrets.DOCKER_USERNAME }}/flask-k8s-app:latest
 
-    - name: Setup kubectl
-      uses: azure/setup-kubectl@v3
-
-    - name: Deploy to Kubernetes
-      run: |
-        kubectl apply -f Day13/k8s/deployment.yaml
-        kubectl apply -f Day13/k8s/service.yaml
+    - name: Skip Deployment
+      run: echo "Skipping deployment because runner is not connected to local Minikube cluster"
 ```
 
 ---
 
-## 🐳 Kubeconfig for GitHub Runner
+### 🐳 Kubeconfig for GitHub Runner (Optional for Cloud)
 
-> ⚠️ You must expose your cluster kubeconfig as a GitHub secret or manually deploy in local-only CI/CD scenarios (like Minikube).
+> If using a **remote Kubernetes cluster**, you can add the kubeconfig file as a GitHub secret:
 
-In our case, we used manual `kubectl apply` to test locally instead of full GitHub kubectl automation.
+Steps:
+
+1. Base64 encode your kubeconfig file:
+
+   ```bash
+   base64 ~/.kube/config
+   ```
+
+2. Save the output to GitHub Secrets as `KUBECONFIG_DATA`
+
+3. Modify the GitHub Actions workflow to restore and use this kubeconfig.
+
+Let me know if you'd like this setup.
 
 ---
 
@@ -233,8 +240,8 @@ You now have:
 
 * Built a Docker image from code
 * Pushed to DockerHub automatically
-* Applied Kubernetes manifests
-* Connected all via GitHub Actions
+* Applied Kubernetes manifests locally
+* Connected build to GitHub Actions
 
 ---
 
@@ -246,6 +253,7 @@ You now have:
 | `nodePort` conflict     | Change port if already allocated                   |
 | Wrong Docker path       | Use `./Day13/app` in workflow                      |
 | No action tab showing   | Workflow file not detected due to wrong location   |
+| kubectl fails in GitHub | Because GitHub can't reach local Minikube          |
 
 ---
 
@@ -266,4 +274,3 @@ kubectl apply -f Day13/k8s/service.yaml
 
 Congratulations 🎉 — You’ve just built an end-to-end CI/CD pipeline for Kubernetes!
 
-Next up: **Day 14 - Real World 3-Tier Application!**
