@@ -1,0 +1,11 @@
+node_modules/
+dist/
+build/
+.git/
+.gitignore
+.env
+.env.*
+npm-debug.log
+yarn-debug.log
+yarn-error.log
+# Add any other large local-only files/folders you don't need in the build

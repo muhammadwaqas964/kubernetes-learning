@@ -1,6 +1,8 @@
+// server/index.ts - FINAL CORRECTED VERSION
 import express, { type Request, Response, NextFunction } from "express";
-import { registerRoutes } from "./routes";
-import { setupVite, serveStatic, log } from "./vite";
+import { createServer, type Server } from "http";
+import { registerRoutes } from "./routes.js";
+import { serveStatic, log } from "./vite.js";
 
 const app = express();
 app.use(express.json());
@@ -37,6 +39,7 @@ app.use((req, res, next) => {
 });
 
 (async () => {
+  // All routes are registered here
   const server = await registerRoutes(app);
 
   app.use((err: any, _req: Request, res: Response, _next: NextFunction) => {
@@ -47,24 +50,29 @@ app.use((req, res, next) => {
     throw err;
   });
 
-  // importantly only setup vite in development and after
-  // setting up all the other routes so the catch-all route
-  // doesn't interfere with the other routes
+  // Serve Vite assets in development, or static build in production
   if (app.get("env") === "development") {
+    const { setupVite } = await import("./vite.js");
     await setupVite(app, server);
   } else {
-    serveStatic(app);
+    // In production, serve the built client static files
+    serveStatic(app); // <--- THIS LINE MUST BE UNCOMMENTED
+    // Remove the following two lines which were for debugging (if they exist):
+    // log("Running in production mode, but static serving is disabled for debugging.");
+    // app.use('/', (req, res) => {
+    //    res.status(200).send('Server is running (static serving disabled for debug).');
+    // });
   }
 
-  // ALWAYS serve the app on port 5000
-  // this serves both the API and the client.
-  // It is the only port that is not firewalled.
   const port = 5000;
-  server.listen({
-    port,
-    host: "0.0.0.0",
-    reusePort: true,
-  }, () => {
-    log(`serving on port ${port}`);
-  });
+  server.listen(
+    {
+      port,
+      host: "0.0.0.0",
+      reusePort: true,
+    },
+    () => {
+      log(`serving on port ${port}`);
+    },
+  );
 })();

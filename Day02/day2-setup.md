@@ -1,35 +1,30 @@
-# 🚀 Day 2: Kubernetes Setup on Fedora (Using Minikube, kubectl, and containerd)
+# 🚀 Day 2: Kubernetes Setup on Fedora (Minikube, kubectl, containerd)
 
 > 📌 **OS Used:** Fedora 40  
-> 🖥️ This guide is specifically for Fedora users who want to set up a **local Kubernetes cluster** using **Minikube**, **containerd**, and **kubectl**.
+> 🛠️ Goal: Set up a local Kubernetes cluster using:
+- `containerd` → container runtime
+- `kubectl` → Kubernetes CLI
+- `Minikube` → Local single-node Kubernetes cluster
 
 ---
 
 ## 🔧 Prerequisites
 
-Ensure your system meets the following:
+Ensure your system has:
 
 - ✅ Fedora 36+ (tested on Fedora 40)
 - ✅ At least 2 CPUs, 2GB RAM, 20GB disk
-- ✅ Virtualization enabled (BIOS/UEFI)
+- ✅ Virtualization enabled in BIOS/UEFI
 - ✅ sudo/root access
-- ✅ Internet connection
+- ✅ Internet access
 
+Check virtualization support:
 ```bash
 egrep -c '(vmx|svm)' /proc/cpuinfo
 # Output should be >= 1
 
-📦 Required Tools
-We will install:
-
-containerd → Container runtime
-
-kubectl → Kubernetes CLI
-
-minikube → Lightweight Kubernetes cluster
-
-Step 1: Install containerd
-
+📦 Step-by-Step Setup
+🐳 Step 1: Install containerd
 # Install dependencies
 sudo dnf install -y yum-utils device-mapper-persistent-data lvm2
 
@@ -39,52 +34,97 @@ sudo dnf install -y containerd
 # Enable and start containerd
 sudo systemctl enable --now containerd
 
-# Check containerd status
+# Check status
 systemctl status containerd
 
-
-Step 2: Install kubectl
-# Download latest stable version
+🤖 Step 2: Install kubectl
+# Download latest version
 curl -LO "https://dl.k8s.io/release/$(curl -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
 
-# Make it executable
+# Make executable
 chmod +x kubectl
 
-# Move it to a system-wide location
+# Move to system path
 sudo mv kubectl /usr/local/bin/
 
 # Verify install
 kubectl version --client
 
-If curl fails, you can manually download from:
-https://kubernetes.io/docs/tasks/tools/install-kubectl-linux/
+📎 If curl fails, download from: https://kubernetes.io/docs/tasks/tools/install-kubectl-linux/
 
+🔧 Step 3: Install Minikube
 
-Step 3: Install Minikube
 # Download Minikube binary
 curl -LO https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64
 
-# Install system-wide
+# Install globally
 sudo install minikube-linux-amd64 /usr/local/bin/minikube
 
-# Verify
+# Check version
 minikube version
 
-Step 4: Start Kubernetes Cluster (with containerd)
-# Start Minikube with containerd
+🚀 Step 4: Start the Cluster (using containerd)
 minikube start --container-runtime=containerd --driver=docker
 
- Step 5: Verify Installation
+This launches a local single-node Kubernetes cluster with containerd as the runtime.
+
+🔍 Step 5: Verify Setup
 minikube status
-
 kubectl get nodes
-
 kubectl cluster-info
+You should see a "Ready" node and access to the control plane components.
+
+🤔 Why containerd over Docker?
+Containerd is:
+
+✅ CNCF-compliant and production-grade
+
+⚡ Lighter and faster than Docker
+
+☁️ Used by cloud providers like GKE and EKS
+
+Using containerd gives you a more realistic, production-aligned setup.
+
+📊 What Does Minikube Do?
+When you run minikube start, it:
+
+Boots a local VM or container with Kubernetes
+
+Installs control plane and worker components
+
+Configures kubectl to point to the local cluster
+
+Check context:
+kubectl config current-context
+kubectl config get-contexts
+
+📂 Bonus: kubeconfig and CLI Tips
+kubectl uses ~/.kube/config to manage clusters and users
+
+Minikube sets this automatically during startup
+kubectl config view
+
+🎨 Minikube Dashboard
+Launch the Kubernetes dashboard UI:
+
+minikube dashboard
+
+🌐 Exposing Services
+minikube service <service-name>
+kubectl port-forward pod/<pod-name> 8080:80
 
 
- Installation Logs (From My Fedora 40 Setup)
+🧰 Helpful Minikube Commands
+Command	Purpose
+minikube stop	Stop the cluster
+minikube delete	Delete the cluster
+minikube logs	Debug failed startup
+kubectl config get-contexts	View clusters & connections
+
+📘 Verified Installation Logs (from my Fedora 40)
+✅ containerd status
 ● containerd.service - containerd container runtime
-     Loaded: loaded (/usr/lib/systemd/system/containerd.service; enabled; preset: disabled)
+     Loaded: loaded (/usr/lib/systemd/system/containerd.service; enabled)
      Active: active (running) since Sat 2025-06-28 18:03:25 PKT
        Docs: https://containerd.io
    Main PID: 1057 (containerd)
@@ -92,13 +132,25 @@ kubectl cluster-info
      Memory: 28.5M
         CPU: 2.232s
 
-kubectl version
+✅ kubectl version
 kubectl version --client
 Client Version: v1.31.1
 Kustomize Version: v5.4.2
 
-Minikube version
+✅ minikube version
 minikube version
 minikube version: v1.36.0
 commit: f8f52f5de11fc6ad8244afac475e1d0f96841df1-dirty
 
+✅ Recap
+Today you learned how to:
+
+Install containerd, kubectl, and Minikube
+
+Bootstrap a local cluster on Fedora
+
+Verify the cluster using CLI tools
+
+Access the dashboard and forward ports
+
+Understand kubeconfig and Minikube internals

@@ -1,15 +1,33 @@
-# Stage 1: Build
-FROM node:20-alpine AS builder
-WORKDIR /app
-COPY . .
-RUN npm install
-RUN npx vite build --config vite.config.ts
+# Dockerfile.client - Frontend Application (Based on your structure)
 
-# Stage 2: Serve
+### --- Builder Stage ---
+FROM oven/bun:1.1.18-alpine AS builder
+WORKDIR /app
+
+# Copy all necessary files for the full project build.
+# This ensures `bun run build` can find all client and server sources.
+COPY . .
+
+# Install all dependencies (bun install from root will handle all deps)
+# Use BuildKit cache mount for faster subsequent 'bun install' runs
+RUN --mount=type=cache,target=/root/.bun/install/cache bun install --frozen-lockfile
+
+# Run the full project build.
+# This command should produce both backend JS and frontend static files
+# at the expected location `/app/dist/server/public`.
+RUN bun run build
+
+### --- Final Stage ---
 FROM node:20-alpine
 WORKDIR /app
-RUN npm install -g serve
-COPY --from=builder /app/dist /app/dist
-EXPOSE 4173
-CMD ["serve", "-s", "dist/public", "-l", "4173"]
 
+# Install 'serve' globally to serve static files.
+RUN npm install -g serve
+
+# Copy built static files from the builder stage.
+# THIS IS THE KEY CHANGE: Copy from /app/dist/server/public in the builder image.
+COPY --from=builder /app/dist/server/public ./public
+
+EXPOSE 4173
+# The port 'serve' will listen on
+CMD ["serve", "-s", "public"]

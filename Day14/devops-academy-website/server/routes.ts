@@ -1,10 +1,11 @@
+// server/routes.ts - FULLY UNCOMMENTED AND CORRECTED VERSION
 import type { Express } from "express";
 import { createServer, type Server } from "http";
-import { storage } from "./storage";
+import { storage } from "./storage.js";
 import { z } from "zod";
 
 export async function registerRoutes(app: Express): Promise<Server> {
-  
+
   // Get all learning paths
   app.get("/api/learning-paths", async (req, res) => {
     try {
@@ -20,12 +21,12 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       const id = parseInt(req.params.id);
       const userId = req.query.userId ? parseInt(req.query.userId as string) : undefined;
-      
+
       const path = await storage.getLearningPathWithTopics(id, userId);
       if (!path) {
         return res.status(404).json({ message: "Learning path not found" });
       }
-      
+
       res.json(path);
     } catch (error) {
       res.status(500).json({ message: "Failed to fetch learning path" });
@@ -42,6 +43,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // 👇 IMPORTANT FIX: Move specific static route BEFORE dynamic route
   // Search topics
   app.get("/api/topics/search", async (req, res) => {
     try {
@@ -49,7 +51,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       if (!query) {
         return res.status(400).json({ message: "Search query is required" });
       }
-      
+
       const topics = await storage.searchTopics(query);
       res.json(topics);
     } catch (error) {
@@ -62,12 +64,12 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       const slug = req.params.slug;
       const userId = req.query.userId ? parseInt(req.query.userId as string) : undefined;
-      
+
       const topic = await storage.getTopicBySlug(slug, userId);
       if (!topic) {
         return res.status(404).json({ message: "Topic not found" });
       }
-      
+
       res.json(topic);
     } catch (error) {
       res.status(500).json({ message: "Failed to fetch topic" });
@@ -86,7 +88,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
       const validatedData = progressSchema.parse(req.body);
       const progress = await storage.updateUserProgress(validatedData);
-      
+
       res.json(progress);
     } catch (error) {
       if (error instanceof z.ZodError) {
@@ -101,7 +103,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       const userId = parseInt(req.params.userId);
       const pathId = parseInt(req.params.pathId);
-      
+
       const progress = await storage.getUserProgressByPath(userId, pathId);
       res.json(progress);
     } catch (error) {

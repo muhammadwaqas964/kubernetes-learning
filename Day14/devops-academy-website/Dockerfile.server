@@ -1,0 +1,38 @@
+# Dockerfile.server - Backend Application (Based on your structure)
+
+# Stage 1: Build the application
+FROM oven/bun:1.1.18-alpine AS builder
+WORKDIR /app
+
+# Copy package.json and bun.lock for dependency caching
+COPY package.json bun.lock ./
+
+# Install all dependencies (including devDependencies for the build step)
+# Use BuildKit cache mount for faster subsequent 'bun install' runs
+RUN --mount=type=cache,target=/root/.bun/install/cache bun install --frozen-lockfile
+
+# Copy the rest of your application source code from the build context root
+COPY . .
+
+# Compile TypeScript to JavaScript
+# This assumes your package.json has a "build" script at the root
+# that compiles server-side code (e.g., "build": "tsc -p tsconfig.build.json")
+RUN bun run build
+
+# Stage 2: Create a slim production image
+FROM node:20-alpine
+WORKDIR /app
+
+# Copy only production dependencies from the builder stage's node_modules
+COPY --from=builder /app/node_modules ./node_modules
+
+# Copy the compiled backend application (the `dist` folder) from the builder stage.
+# This `dist` folder contains `server/index.js`.
+COPY --from=builder /app/dist ./dist
+
+# Copy package.json if any runtime scripts or information from it are needed.
+# This is generally a good practice.
+COPY package.json ./
+
+EXPOSE 5000
+CMD ["node", "dist/server/index.js"]
