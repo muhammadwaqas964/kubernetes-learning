@@ -41,9 +41,10 @@ export default defineConfig({
     emptyOutDir: true, // This is good practice to ensure a clean build
   },
   server: {
-    fs: {
-      strict: true,
-      deny: ["**/.*"],
-    },
+  allowedHosts: ['devops.local'],
+  fs: {
+    strict: true,
+    deny: ["**/.*"],
   },
+},
 });

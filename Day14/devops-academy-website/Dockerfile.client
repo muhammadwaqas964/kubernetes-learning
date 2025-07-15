@@ -1,33 +1,43 @@
-# Dockerfile.client - Frontend Application (Based on your structure)
+# Dockerfile.server - Combined Backend & Frontend Image
 
-### --- Builder Stage ---
+# Stage 1: Build the application
 FROM oven/bun:1.1.18-alpine AS builder
 WORKDIR /app
 
-# Copy all necessary files for the full project build.
-# This ensures `bun run build` can find all client and server sources.
-COPY . .
+# Copy lockfiles first for caching
+COPY package.json bun.lock ./
 
-# Install all dependencies (bun install from root will handle all deps)
-# Use BuildKit cache mount for faster subsequent 'bun install' runs
+# Install dependencies (including devDependencies)
 RUN --mount=type=cache,target=/root/.bun/install/cache bun install --frozen-lockfile
 
-# Run the full project build.
-# This command should produce both backend JS and frontend static files
-# at the expected location `/app/dist/server/public`.
+# Copy the full source code
+COPY . .
+
+# Build backend (TypeScript)
 RUN bun run build
 
-### --- Final Stage ---
+# Build frontend (Vite)
+WORKDIR /app/client
+RUN bunx vite build
+
+# Stage 2: Production image
 FROM node:20-alpine
 WORKDIR /app
 
-# Install 'serve' globally to serve static files.
-RUN npm install -g serve
+# Copy only production dependencies
+COPY --from=builder /app/node_modules ./node_modules
 
-# Copy built static files from the builder stage.
-# THIS IS THE KEY CHANGE: Copy from /app/dist/server/public in the builder image.
-COPY --from=builder /app/dist/server/public ./public
+# Copy compiled backend (includes server/index.js and routes)
+COPY --from=builder /app/dist ./dist
 
-EXPOSE 4173
-# The port 'serve' will listen on
-CMD ["serve", "-s", "public"]
+# Copy frontend static files into public dir
+COPY --from=builder /app/dist/server/public ./dist/server/public
+
+# Copy package.json (optional but useful)
+COPY package.json ./
+
+# Expose the backend port
+EXPOSE 5000
+
+# Start backend server
+CMD ["node", "dist/server/index.js"]

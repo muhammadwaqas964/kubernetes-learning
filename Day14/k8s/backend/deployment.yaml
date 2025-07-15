@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
       - name: backend
-        image: muhammadwaqas366/devops-server:latest
+        image: muhammadwaqas366/devops-backend:latest
         imagePullPolicy: Always
         ports:
         - containerPort: 5000  # ✅ must match server.listen port

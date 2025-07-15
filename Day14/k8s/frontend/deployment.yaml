@@ -17,4 +17,4 @@ spec:
         image: muhammadwaqas366/devops-client:latest
         imagePullPolicy: Always
         ports:
-        - containerPort: 4173
+        - containerPort: 3000

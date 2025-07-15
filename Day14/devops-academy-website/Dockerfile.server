@@ -34,5 +34,11 @@ COPY --from=builder /app/dist ./dist
 # This is generally a good practice.
 COPY package.json ./
 
+# Set production mode
+ENV NODE_ENV=production
+
+
 EXPOSE 5000
+
 CMD ["node", "dist/server/index.js"]
+
