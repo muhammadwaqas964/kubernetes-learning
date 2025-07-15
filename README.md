@@ -27,7 +27,7 @@ Welcome to my hands-on Kubernetes learning journey. This repository documents pr
 
 ## 🖼️ Screenshots
 
-Screenshots and config files for each day are available in the `Images/` folder and embedded inside each day's notes.
+Screenshots and config files for each day are available and embedded inside each day's notes.
 
 ---
 
@@ -57,19 +57,48 @@ kubectl apply -f Day3/nginx-pod.yaml
 
 Each day folder contains all .yaml, .ts, and Docker-related files to run and test locally.
 
+---
+
 ✅ Latest Progress: Day 14 (DevOps Academy Website Deployment)
-Deployed full-stack application with:
+✅ Deployed full-stack application with:
 
 Frontend (React + Vite)
 
 Backend (Express + Bun + TypeScript)
 
-Dockerized both services with multistage builds
+✅ Dockerized both services with multistage builds
 
-Created Kubernetes deployments, services, ingress, configmap & secrets
+✅ Created Kubernetes deployments, services, ingress, configmap & secrets
 
-Faced and resolved multiple runtime, module, and build issues
+✅ Faced and resolved multiple runtime, module, and build issues
 
+✅ Final output was successfully exposed via devops.local through Ingress
+
+---
+
+🚨 Key Errors Faced in Real-World Scenario
+❌ Missing modules like vite, nanoid, or @vitejs/plugin-react
+
+💡 Fixed by running:
+bun add vite nanoid @vitejs/plugin-react @replit/vite-plugin-runtime-error-modal @replit/vite-plugin-cartographer
+
+❌ LightningCSS error from lightningcss/node/index.js
+
+💡 Fixed by cleaning node_modules, removing bun.lock, and reinstalling dependencies
+
+❌ Ingress path /api not routing
+
+💡 Fixed by setting proper Ingress rules and using host: devops.local
+
+❌ Docker container couldn't start due to missing compiled output
+
+💡 Fixed by ensuring bun run build creates dist/server/index.js
+
+❌ Static files not served in production
+
+💡 Fixed with serveStatic(app) fallback in production mode inside backend code
+
+---
 
 📅 Coming Next
 Day 15: StatefulSets and Running Databases in Kubernetes
@@ -78,15 +107,13 @@ Day 16: Monitoring with Prometheus and Grafana
 
 Day 17: Kubernetes Operators & CRDs Deep Dive
 
+---
 
 📜 License
 MIT License — you're free to fork, share, and build on this project!
 
+
 ---
 
-Let me know if you’d like:
-
-- Screenshots embedded into the README.
-- A badge showing Day 14 completed ✅.
-- GitHub Actions to deploy this repo to a cluster automatically.
+Let me know if you'd like this version saved into your project automatically or if you want a downloadable `.md` file.
 
